@@ -25,9 +25,9 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += main.cpp\
         gameboard.cpp \
-    minezone.cpp
+        minezone.cpp
 
 HEADERS  += gameboard.h \
-    minezone.h
+        minezone.h
 
 FORMS    += gameboard.ui
