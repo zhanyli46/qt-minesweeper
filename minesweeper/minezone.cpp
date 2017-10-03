@@ -1,5 +1,6 @@
 #include "minezone.h"
 #include <QtGlobal>
+#include <QQueue>
 #include <ctime>
 #include <iostream>
 
@@ -29,6 +30,7 @@ Minezone::Minezone(QWidget *parent) :
             zone[i][j] = EMPTY;
             mine_btns[i][j] = new QPushButton(this);
             mine_btns[i][j]->setFixedSize(24, 24);
+            mine_btns[i][j]->setCheckable(true);
             zone_grid->addWidget(mine_btns[i][j], i, j);
 
             // assign id to each button to handle signal
@@ -129,16 +131,48 @@ int Minezone::numMinesAround(int r, int c)
     return sum;
 }
 
+void Minezone::expandZone(int r, int c)
+{
+    QQueue<int> queue;
+    queue.enqueue(r * n_rows + c);
+    while (!queue.empty()) {
+        int btn_id = queue.dequeue();
+        std::cerr << "btn_id = " << btn_id << std::endl;
+        int i, j;
+        mineIdToRC(btn_id, &i, &j);
+        if (zone[i][j] == PRESSED)
+            continue;
+        if (zone[i][j] == EMPTY) {
+            queue.enqueue((i + 1) * n_rows + j);
+            queue.enqueue(i * n_rows + (j + 1));
+            queue.enqueue((i - 1) * n_rows + j);
+            queue.enqueue(i * n_rows + (j - 1));
+            mine_btns[i][j]->setChecked(true);
+            zone[i][j] = PRESSED;
+        } else {
+            if (numMinesAround(i, j) == 0) {
+                queue.enqueue((i + 1) * n_rows + j);
+                queue.enqueue(i * n_rows + (j + 1));
+                queue.enqueue((i - 1) * n_rows + j);
+                queue.enqueue(i * n_rows + (j - 1));
+            }
+            mine_btns[i][j]->setText(QString::number(static_cast<int>(zone[i][j])));
+            mine_btns[i][j]->setChecked(true);
+            zone[i][j] = PRESSED;
+        }
+
+    }
+}
 
 void Minezone::mineButtonHandler(int btn_id)
 {
-    if (firstClick)
-    {
+    int r, c;
+    mineIdToRC(btn_id, &r, &c);
+    if (firstClick) {
         firstClick = false;
-        int r1, c1;
-        mineIdToRC(btn_id, &r1, &c1);
-        generateMines(r1, c1);
+        generateMines(r, c);
         generateHintTiles();
     }
-    print();
+
+    expandZone(r, c);
 }
