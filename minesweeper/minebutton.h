@@ -11,6 +11,11 @@ class MineButton : public QPushButton
 public:
     MineButton(QWidget *parent = 0);
     ~MineButton();
+    bool isFlagged() { return flag; }
+    void setFlagged(bool b) { flag = b; }
+
+private:
+    bool flag;
 
 private slots:
     void mousePressEvent(QMouseEvent *e);

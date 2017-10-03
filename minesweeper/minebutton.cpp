@@ -1,8 +1,8 @@
 #include "minebutton.h"
-#include <iostream>
 
 MineButton::MineButton(QWidget *parent)
-    : QPushButton(parent)
+    : QPushButton(parent),
+      flag(false)
 {
 }
 

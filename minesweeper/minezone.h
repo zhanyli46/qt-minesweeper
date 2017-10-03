@@ -5,6 +5,7 @@
 #include <QGridLayout>
 #include <QPushButton>
 #include <QSignalMapper>
+#include "minebutton.h"
 
 enum Zonestatus {
     EMPTY = 0,
@@ -40,12 +41,17 @@ private:
     int n_mines;
     bool firstClick;
     Zonestatus **zone;
-    QPushButton ***mine_btns;
+    MineButton ***mine_btns;
     QGridLayout *zone_grid;
-    QSignalMapper *mapper;
+    QSignalMapper *leftMapper;
+    QSignalMapper *rightMapper;
 
 private slots:
-    void mineButtonHandler(int btn_id);
+    void onLeftMouseClick(int btn_id);
+    void onRightMouseClick(int btn_id);
+
+signals:
+    void mineDetonated();
 };
 
 #endif // MINEZONE_H

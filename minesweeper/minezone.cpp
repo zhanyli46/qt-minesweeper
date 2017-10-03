@@ -15,40 +15,41 @@ Minezone::Minezone(QWidget *parent) :
     firstClick = true;
 
     // setup mapper for buttons
-    mapper = new QSignalMapper(this);
+    leftMapper = new QSignalMapper(this);
+    rightMapper = new QSignalMapper(this);
 
     // setup minezone and ui
     zone = new Zonestatus*[n_rows];
     zone_grid = new QGridLayout(this);
-    mine_btns = new QPushButton**[n_rows];
+    mine_btns = new MineButton**[n_rows];
     for (int i = 0; i < n_rows; i++)
     {
         zone[i] = new Zonestatus[n_cols];
-        mine_btns[i] = new QPushButton*[n_cols];
+        mine_btns[i] = new MineButton*[n_cols];
         for (int j = 0; j < n_cols; j++)
         {
             zone[i][j] = EMPTY;
-            mine_btns[i][j] = new QPushButton(this);
+            mine_btns[i][j] = new MineButton(this);
             mine_btns[i][j]->setFixedSize(24, 24);
             mine_btns[i][j]->setCheckable(true);
             zone_grid->addWidget(mine_btns[i][j], i, j);
 
             // assign id to each button to handle signal
             int btn_id = i * n_rows + j;
-            connect(mine_btns[i][j], SIGNAL(clicked()), mapper, SLOT(map()));
-            mapper->setMapping(mine_btns[i][j], btn_id);
+            connect(mine_btns[i][j], SIGNAL(leftClicked()), leftMapper, SLOT(map()));
+            connect(mine_btns[i][j], SIGNAL(rightClicked()), rightMapper, SLOT(map()));
+            leftMapper->setMapping(mine_btns[i][j], btn_id);
+            rightMapper->setMapping(mine_btns[i][j], btn_id);
         }
     }
 
     // connect the mapper to handler function
-    connect(mapper, SIGNAL(mapped(int)), this, SLOT(mineButtonHandler(int)));
+    connect(leftMapper, SIGNAL(mapped(int)), this, SLOT(onLeftMouseClick(int)));
+    connect(rightMapper, SIGNAL(mapped(int)), this, SLOT(onRightMouseClick(int)));
 }
 
 Minezone::~Minezone()
 {
-//    Zonestatus **zone;
-//    QPushButton ***mine_btns;
-//    QGridLayout *zone_grid;
     for (int i = 0; i < n_rows; i++)
     {
         delete zone[i];
@@ -137,7 +138,6 @@ void Minezone::expandZone(int r, int c)
     queue.enqueue(r * n_rows + c);
     while (!queue.empty()) {
         int btn_id = queue.dequeue();
-        std::cerr << "btn_id = " << btn_id << std::endl;
         int i, j;
         mineIdToRC(btn_id, &i, &j);
         if (zone[i][j] == PRESSED)
@@ -173,7 +173,7 @@ void Minezone::expandZone(int r, int c)
     }
 }
 
-void Minezone::mineButtonHandler(int btn_id)
+void Minezone::onLeftMouseClick(int btn_id)
 {
     int r, c;
     mineIdToRC(btn_id, &r, &c);
@@ -182,6 +182,20 @@ void Minezone::mineButtonHandler(int btn_id)
         generateMines(r, c);
         generateHintTiles();
     }
-
+    if (mine_btns[r][c]->isFlagged())
+        return;
     expandZone(r, c);
+}
+
+void Minezone::onRightMouseClick(int btn_id)
+{
+    int r, c;
+    mineIdToRC(btn_id, &r, &c);
+    bool flagged = mine_btns[r][c]->isFlagged();
+    if (flagged) {
+        mine_btns[r][c]->setText("");
+    } else {
+        mine_btns[r][c]->setText("F");
+    }
+    mine_btns[r][c]->setFlagged(!flagged);
 }
