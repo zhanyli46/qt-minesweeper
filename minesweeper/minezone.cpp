@@ -143,18 +143,27 @@ void Minezone::expandZone(int r, int c)
         if (zone[i][j] == PRESSED)
             continue;
         if (zone[i][j] == EMPTY) {
-            queue.enqueue((i + 1) * n_rows + j);
-            queue.enqueue(i * n_rows + (j + 1));
-            queue.enqueue((i - 1) * n_rows + j);
-            queue.enqueue(i * n_rows + (j - 1));
+            if (i + 1 < n_rows)
+                queue.enqueue((i + 1) * n_rows + j);
+            if (j + 1 < n_cols)
+                queue.enqueue(i * n_rows + (j + 1));
+            if (i - 1 >= 0)
+                queue.enqueue((i - 1) * n_rows + j);
+            if (j - 1 >= 0)
+                queue.enqueue(i * n_rows + (j - 1));
             mine_btns[i][j]->setChecked(true);
             zone[i][j] = PRESSED;
         } else {
             if (numMinesAround(i, j) == 0) {
-                queue.enqueue((i + 1) * n_rows + j);
-                queue.enqueue(i * n_rows + (j + 1));
-                queue.enqueue((i - 1) * n_rows + j);
-                queue.enqueue(i * n_rows + (j - 1));
+                if (i + 1 < n_rows)
+                    queue.enqueue((i + 1) * n_rows + j);
+                if (j + 1 < n_cols)
+                    queue.enqueue(i * n_rows + (j + 1));
+                if (i - 1 >= 0)
+                    queue.enqueue((i - 1) * n_rows + j);
+                if (j - 1 >= 0)
+                    queue.enqueue(i * n_rows + (j - 1));
+                mine_btns[i][j]->setChecked(true);
             }
             mine_btns[i][j]->setText(QString::number(static_cast<int>(zone[i][j])));
             mine_btns[i][j]->setChecked(true);
