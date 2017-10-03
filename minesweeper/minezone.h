@@ -16,7 +16,8 @@ enum Zonestatus {
     SIX = 6,
     SEVEN = 7,
     EIGHT = 8,
-    MINE
+    MINE,
+    PRESSED
 };
 
 class Minezone : public QWidget
@@ -33,7 +34,7 @@ private:
     int numMinesAround(int r, int c);
     void generateMines(int r, int c);
     void generateHintTiles();
-    bool noMineZone(int r, int c);
+    void expandZone(int r, int c);
     int n_rows;
     int n_cols;
     int n_mines;
