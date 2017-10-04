@@ -140,9 +140,11 @@ void Minezone::expandZone(int r, int c)
         int btn_id = queue.dequeue();
         int i, j;
         mineIdToRC(btn_id, &i, &j);
-        if (zone[i][j] == PRESSED)
+        MineButton *btn = mine_btns[i][j];
+        Zonestatus btn_stat = zone[i][j];
+        if (btn_stat == PRESSED || btn->isFlagged())
             continue;
-        if (zone[i][j] == EMPTY) {
+        if (btn_stat == EMPTY) {
             if (i + 1 < n_rows)
                 queue.enqueue((i + 1) * n_rows + j);
             if (j + 1 < n_cols)
@@ -151,8 +153,10 @@ void Minezone::expandZone(int r, int c)
                 queue.enqueue((i - 1) * n_rows + j);
             if (j - 1 >= 0)
                 queue.enqueue(i * n_rows + (j - 1));
-            mine_btns[i][j]->setChecked(true);
+            btn->setChecked(true);
             zone[i][j] = PRESSED;
+        } else if (btn_stat == MINE) {
+            emit mineDetonated();
         } else {
             if (numMinesAround(i, j) == 0) {
                 if (i + 1 < n_rows)
@@ -163,13 +167,12 @@ void Minezone::expandZone(int r, int c)
                     queue.enqueue((i - 1) * n_rows + j);
                 if (j - 1 >= 0)
                     queue.enqueue(i * n_rows + (j - 1));
-                mine_btns[i][j]->setChecked(true);
+                btn->setChecked(true);
             }
-            mine_btns[i][j]->setText(QString::number(static_cast<int>(zone[i][j])));
-            mine_btns[i][j]->setChecked(true);
+            btn->setText(QString::number(static_cast<int>(btn_stat)));
+            btn->setChecked(true);
             zone[i][j] = PRESSED;
         }
-
     }
 }
 
@@ -182,8 +185,6 @@ void Minezone::onLeftMouseClick(int btn_id)
         generateMines(r, c);
         generateHintTiles();
     }
-    if (mine_btns[r][c]->isFlagged())
-        return;
     expandZone(r, c);
 }
 
