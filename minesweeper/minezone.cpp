@@ -72,6 +72,25 @@ void Minezone::print()
     }
 }
 
+void Minezone::ignoreInputs()
+{
+    setAttribute(Qt::WA_TransparentForMouseEvents);
+}
+
+void Minezone::showAllMines()
+{
+    for (int i = 0; i < n_rows; i++)
+    {
+        for (int j = 0; j < n_cols; j++)
+        {
+            if (zone[i][j] == MINE && !mine_btns[i][j]->isFlagged()) {
+                mine_btns[i][j]->setText("*");
+                mine_btns[i][j]->setChecked(true);
+            }
+        }
+    }
+}
+
 void Minezone::generateMines(int r1, int c1)
 {
     int i = 0;
@@ -156,7 +175,9 @@ void Minezone::expandZone(int r, int c)
             btn->setChecked(true);
             zone[i][j] = PRESSED;
         } else if (btn_stat == MINE) {
-            emit mineDetonated();
+            btn->setText("*");
+            btn->setChecked(true);
+            emit sigGameOver();
         } else {
             if (numMinesAround(i, j) == 0) {
                 if (i + 1 < n_rows)

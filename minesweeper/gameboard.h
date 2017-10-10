@@ -25,6 +25,9 @@ public:
 private:
     Ui::Gameboard *ui;
     Minezone *mz;
+
+private slots:
+    void gameOver();
 };
 
 #endif // GAMEBOARD_H

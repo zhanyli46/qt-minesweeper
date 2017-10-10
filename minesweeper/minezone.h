@@ -29,6 +29,8 @@ public:
     Minezone(QWidget *parent = 0);
     ~Minezone();
     void print();
+    void ignoreInputs();
+    void showAllMines();
 
 private:
     inline void mineIdToRC(int id, int *r, int *c);
@@ -51,7 +53,8 @@ private slots:
     void onRightMouseClick(int btn_id);
 
 signals:
-    void mineDetonated();
+    void sigGameWon();
+    void sigGameOver();
 };
 
 #endif // MINEZONE_H
