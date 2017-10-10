@@ -6,9 +6,12 @@ Gameboard::Gameboard(QWidget *parent) :
     ui(new Ui::Gameboard)
 {
     ui->setupUi(this);
-    // setup mine zone and ui
-    mz = new Minezone(this);
-    mz->setGeometry(10, 10, 216, 216);
+    lv = EASY;
+    mz = new Minezone(this, MEDIUM);
+    zone_height = mz->getHeight();
+    zone_width = mz->getWidth();
+    mz->setGeometry(10, 10, zone_height, zone_width);
+    this->setGeometry(400, 400, zone_height + 100, zone_width + 100);
     connect(mz, SIGNAL(sigGameOver()), this, SLOT(gameOver()));
 
 }

@@ -4,13 +4,13 @@
 #include <ctime>
 #include <iostream>
 
-Minezone::Minezone(QWidget *parent) :
+Minezone::Minezone(QWidget *parent, Difficulty lv) :
     QWidget(parent)
 {
     // setup level info
-    n_rows = 9;
-    n_cols = 9;
-    n_mines = 10;
+    setLevel(lv);
+    zone_height = n_rows * TILE_SIZE;
+    zone_width = n_cols * TILE_SIZE;
     qsrand(time(0));
     firstClick = true;
 
@@ -30,7 +30,7 @@ Minezone::Minezone(QWidget *parent) :
         {
             zone[i][j] = EMPTY;
             mine_btns[i][j] = new MineButton(this);
-            mine_btns[i][j]->setFixedSize(24, 24);
+            mine_btns[i][j]->setFixedSize(TILE_SIZE, TILE_SIZE);
             mine_btns[i][j]->setCheckable(true);
             zone_grid->addWidget(mine_btns[i][j], i, j);
 
@@ -88,6 +88,23 @@ void Minezone::showAllMines()
                 mine_btns[i][j]->setChecked(true);
             }
         }
+    }
+}
+
+void Minezone::setLevel(Difficulty lv)
+{
+    if (lv == EASY) {
+        n_rows = 9;
+        n_cols = 9;
+        n_mines = 10;
+    } else if (lv == MEDIUM) {
+        n_rows = 16;
+        n_cols = 16;
+        n_mines = 40;
+    } else {
+        n_rows = 30;
+        n_cols = 16;
+        n_mines = 99;
     }
 }
 

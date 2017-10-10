@@ -4,12 +4,6 @@
 #include <QMainWindow>
 #include "minezone.h"
 
-enum Level {
-    EASY,
-    MEDIUM,
-    HARD
-};
-
 namespace Ui {
 class Gameboard;
 }
@@ -25,6 +19,9 @@ public:
 private:
     Ui::Gameboard *ui;
     Minezone *mz;
+    int zone_height;
+    int zone_width;
+    Difficulty lv;
 
 private slots:
     void gameOver();

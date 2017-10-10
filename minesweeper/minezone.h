@@ -7,6 +7,15 @@
 #include <QSignalMapper>
 #include "minebutton.h"
 
+const int OFFSET_FROM_TOP = 60;
+const int TILE_SIZE = 24;
+
+enum Difficulty {
+    EASY,
+    MEDIUM,
+    HARD
+};
+
 enum Zonestatus {
     EMPTY = 0,
     ONE = 1,
@@ -26,18 +35,24 @@ class Minezone : public QWidget
     Q_OBJECT
 
 public:
-    Minezone(QWidget *parent = 0);
+    Minezone(QWidget *parent = 0, Difficulty lv = EASY);
     ~Minezone();
     void print();
+    int getHeight() { return zone_height; }
+    int getWidth() { return zone_width; }
     void ignoreInputs();
     void showAllMines();
 
 private:
+    void setLevel(Difficulty lv);
     inline void mineIdToRC(int id, int *r, int *c);
     int numMinesAround(int r, int c);
     void generateMines(int r, int c);
     void generateHintTiles();
     void expandZone(int r, int c);
+
+    int zone_height;
+    int zone_width;
     int n_rows;
     int n_cols;
     int n_mines;
