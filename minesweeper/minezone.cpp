@@ -231,6 +231,9 @@ void Minezone::onRightMouseClick(int btn_id)
     int r, c;
     mineIdToRC(btn_id, &r, &c);
     bool flagged = mine_btns[r][c]->isFlagged();
+    bool pressed = zone[r][c] == PRESSED;
+    if (pressed)
+        return;
     if (flagged) {
         mine_btns[r][c]->setText("");
     } else {
