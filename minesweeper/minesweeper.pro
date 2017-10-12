@@ -26,10 +26,12 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += main.cpp\
         gameboard.cpp \
         minezone.cpp \
-        minebutton.cpp
+        minebutton.cpp \
+        timer.cpp
 
 HEADERS  += gameboard.h \
         minezone.h \
-        minebutton.h
+        minebutton.h \
+        timer.h
 
 FORMS    += gameboard.ui

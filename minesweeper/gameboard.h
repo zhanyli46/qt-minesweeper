@@ -2,7 +2,10 @@
 #define GAMEBOARD_H
 
 #include <QMainWindow>
+#include <QWidget>
+#include <QGridLayout>
 #include "minezone.h"
+#include "timer.h"
 
 namespace Ui {
 class Gameboard;
@@ -18,6 +21,11 @@ public:
 
 private:
     Ui::Gameboard *ui;
+    QWidget *central;
+    QGridLayout *layout;
+    GameTimer *timer;
+    QPushButton *restart;
+    QLCDNumber *mineCount;
     Minezone *mz;
     int zone_height;
     int zone_width;
