@@ -1,5 +1,6 @@
 #include "gameboard.h"
 #include "ui_gameboard.h"
+#include <iostream>
 
 Gameboard::Gameboard(QWidget *parent) :
     QMainWindow(parent),
@@ -8,24 +9,32 @@ Gameboard::Gameboard(QWidget *parent) :
     ui->setupUi(this);
     lv = EASY;
     // setup user interface
-    central = new QWidget(this);
-    layout = new QGridLayout(central);
-    timer = new GameTimer(central);
-    restart = new QPushButton(central);
-    mineCount = new QLCDNumber(central);
+    int h_offset= 12;
+    int top_offset = 24;
+    int bottom_offset = 12;
+    int dist_offset = 10;
+
+    timer = new GameTimer(this);
+    restart = new QPushButton(this);
+    counter = new QLCDNumber(this);
     mz = new Minezone(this, EASY);
-    layout->addWidget(timer, 0, 0);
-    layout->addWidget(restart, 0, 1);
-    layout->addWidget(mineCount, 0, 2);
-    layout->addWidget(mz, 1, 0);
-    setCentralWidget(central);
+    timer->resize(83, 30);
+    restart->resize(30, 30);
+    counter->resize(83, 30);
+    mz->resize(216, 216);
 
+    timer->move(h_offset, top_offset);
+    restart->move(timer->pos().x() + timer->size().width() + dist_offset, top_offset);
+    counter->move(restart->pos().x() + restart->size().width() + dist_offset, top_offset);
+    mz->move(h_offset, timer->pos().y() + timer->size().height() + dist_offset);
+    resize(h_offset * 2 + mz->size().width(), top_offset + bottom_offset + mz->size().height() + dist_offset + timer->size().height());
 
-
-
-//    this->setGeometry(400, 400, zone_height + 100, zone_width + 100);
     connect(mz, SIGNAL(sigGameOver()), this, SLOT(gameOver()));
 
+    setMinimumHeight(height());
+    setMaximumHeight(height());
+    setMinimumWidth(width());
+    setMaximumWidth(width());
 }
 
 Gameboard::~Gameboard()

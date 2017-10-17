@@ -3,7 +3,8 @@
 
 #include <QMainWindow>
 #include <QWidget>
-#include <QGridLayout>
+#include <QHBoxLayout>
+#include <QVBoxLayout>
 #include "minezone.h"
 #include "timer.h"
 
@@ -21,11 +22,9 @@ public:
 
 private:
     Ui::Gameboard *ui;
-    QWidget *central;
-    QGridLayout *layout;
     GameTimer *timer;
     QPushButton *restart;
-    QLCDNumber *mineCount;
+    QLCDNumber *counter;
     Minezone *mz;
     int zone_height;
     int zone_width;

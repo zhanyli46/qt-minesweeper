@@ -20,7 +20,6 @@ Minezone::Minezone(QWidget *parent, Difficulty lv) :
 
     // setup minezone and ui
     zone = new Zonestatus*[n_rows];
-    zone_grid = new QGridLayout(this);
     mine_btns = new MineButton**[n_rows];
     for (int i = 0; i < n_rows; i++)
     {
@@ -32,7 +31,7 @@ Minezone::Minezone(QWidget *parent, Difficulty lv) :
             mine_btns[i][j] = new MineButton(this);
             mine_btns[i][j]->setFixedSize(TILE_SIZE, TILE_SIZE);
             mine_btns[i][j]->setCheckable(true);
-            zone_grid->addWidget(mine_btns[i][j], i, j);
+            mine_btns[i][j]->move(TILE_SIZE * i, TILE_SIZE * j);
 
             // assign id to each button to handle signal
             int btn_id = i * n_rows + j;
@@ -46,6 +45,7 @@ Minezone::Minezone(QWidget *parent, Difficulty lv) :
     // connect the mapper to handler function
     connect(leftMapper, SIGNAL(mapped(int)), this, SLOT(onLeftMouseClick(int)));
     connect(rightMapper, SIGNAL(mapped(int)), this, SLOT(onRightMouseClick(int)));
+
 }
 
 Minezone::~Minezone()
@@ -59,7 +59,6 @@ Minezone::~Minezone()
     }
     delete zone;
     delete mine_btns;
-    delete zone_grid;
 }
 
 void Minezone::print()

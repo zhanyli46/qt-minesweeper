@@ -59,7 +59,6 @@ private:
     bool firstClick;
     Zonestatus **zone;
     MineButton ***mine_btns;
-    QGridLayout *zone_grid;
     QSignalMapper *leftMapper;
     QSignalMapper *rightMapper;
 
