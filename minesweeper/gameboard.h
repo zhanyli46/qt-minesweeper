@@ -33,6 +33,7 @@ private:
     int dist_offset;
 
 private slots:
+    void winGame();
     void endGame();
     void restartGame();
 };

@@ -62,6 +62,7 @@ private:
     int n_cols;
     int n_mines;
     bool firstClick;
+    int numTileRemained;
     Zonestatus **zone;
     MineButton ***mine_btns;
     QSignalMapper *leftMapper;

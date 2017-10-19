@@ -47,6 +47,7 @@ void Minezone::createZone()
     zone_width = n_cols * TILE_SIZE;
     qsrand(time(0));
     firstClick = true;
+    numTileRemained = n_rows * n_cols;
 
     // setup mapper for buttons
     leftMapper = new QSignalMapper(this);
@@ -103,7 +104,6 @@ void Minezone::resetZone(Difficulty lv)
     destroyZone();
     setLevel(lv);
     createZone();
-    acceptInputs();
 }
 
 void Minezone::setLevel(Difficulty lv)
@@ -206,6 +206,7 @@ void Minezone::expandZone(int r, int c)
                 queue.enqueue(i * n_rows + (j - 1));
             btn->setChecked(true);
             zone[i][j] = PRESSED;
+            numTileRemained -= 1;
         } else if (btn_stat == MINE) {
             btn->setText("*");
             btn->setChecked(true);
@@ -225,8 +226,11 @@ void Minezone::expandZone(int r, int c)
             btn->setText(QString::number(static_cast<int>(btn_stat)));
             btn->setChecked(true);
             zone[i][j] = PRESSED;
+            numTileRemained -= 1;
         }
     }
+    if (numTileRemained == n_mines)
+        emit gameWon();
 }
 
 void Minezone::onLeftMouseClick(int btn_id)

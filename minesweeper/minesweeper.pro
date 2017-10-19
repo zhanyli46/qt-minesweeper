@@ -37,3 +37,6 @@ HEADERS  += gameboard.h \
         counter.h
 
 FORMS    += gameboard.ui
+
+RESOURCES += \
+    images.qrc
