@@ -13,6 +13,7 @@ public:
     GameTimer(QWidget *parent = 0);
     ~GameTimer();
     void stop();
+    void reset();
 
 private:
     QTimer *timer;

@@ -53,5 +53,6 @@ void Gameboard::endGame()
 
 void Gameboard::restartGame()
 {
+    timer->reset();
     mz->resetZone(lv);
 }
