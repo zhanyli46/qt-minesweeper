@@ -44,6 +44,7 @@ public:
     void ignoreInputs();
     void showAllMines();
     void resetZone(Difficulty lv);
+    int getNumMines();
 
 private:
     void setLevel(Difficulty lv);
@@ -74,6 +75,8 @@ signals:
     void gameStart();
     void gameWon();
     void gameOver();
+    void label();
+    void unlabel();
 
 };
 

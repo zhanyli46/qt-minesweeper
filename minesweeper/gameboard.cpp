@@ -15,8 +15,8 @@ Gameboard::Gameboard(QWidget *parent) :
 
     timer = new GameTimer(this);
     restart = new QPushButton(this);
-    counter = new QLCDNumber(this);
     mz = new Minezone(this, lv);
+    counter = new MineCounter(this, mz->getNumMines());
     timer->resize(83, 30);
     restart->resize(30, 30);
     counter->resize(83, 30);
@@ -31,6 +31,8 @@ Gameboard::Gameboard(QWidget *parent) :
     connect(mz, SIGNAL(gameStart()), timer, SLOT(start()));
     connect(mz, SIGNAL(gameOver()), this, SLOT(endGame()));
     connect(restart, SIGNAL(clicked(bool)), this, SLOT(restartGame()));
+    connect(mz, SIGNAL(label()), counter, SLOT(minusOne()));
+    connect(mz, SIGNAL(unlabel()), counter, SLOT(plusOne()));
 
     setMinimumHeight(height());
     setMaximumHeight(height());
@@ -55,4 +57,5 @@ void Gameboard::restartGame()
 {
     timer->reset();
     mz->resetZone(lv);
+    counter->setValue(mz->getNumMines());
 }

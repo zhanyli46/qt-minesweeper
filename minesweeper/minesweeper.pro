@@ -27,11 +27,13 @@ SOURCES += main.cpp\
         gameboard.cpp \
         minezone.cpp \
         minebutton.cpp \
-        timer.cpp
+        timer.cpp \
+        counter.cpp
 
 HEADERS  += gameboard.h \
         minezone.h \
         minebutton.h \
-        timer.h
+        timer.h \
+        counter.h
 
 FORMS    += gameboard.ui

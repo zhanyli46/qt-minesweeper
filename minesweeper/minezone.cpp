@@ -252,8 +252,15 @@ void Minezone::onRightMouseClick(int btn_id)
         return;
     if (flagged) {
         mine_btns[r][c]->setText("");
+        emit unlabel();
     } else {
         mine_btns[r][c]->setText("F");
+        emit label();
     }
     mine_btns[r][c]->setFlagged(!flagged);
+}
+
+int Minezone::getNumMines()
+{
+    return n_mines;
 }

@@ -1,5 +1,4 @@
 #include "timer.h"
-#include <iostream>
 
 GameTimer::GameTimer(QWidget *parent)
     : QLCDNumber(parent)
@@ -30,11 +29,11 @@ void GameTimer::reset()
 {
     startTime = QTime::currentTime();
     display(startTime.elapsed());
+    stop();
 }
 
 void GameTimer::showTime()
 {
-    std::cerr << startTime.elapsed() << std::endl;
     if (startTime.elapsed() % 1000 >= 500)
         display(startTime.elapsed() / 1000 + 1);
     else
