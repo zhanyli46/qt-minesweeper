@@ -45,6 +45,7 @@ public:
     void showAllMines();
     void resetZone(Difficulty lv);
     int getNumMines();
+    void showWinningMessage();
 
 private:
     void setLevel(Difficulty lv);
@@ -55,6 +56,8 @@ private:
     void generateMines(int r, int c);
     void generateHintTiles();
     void expandZone(int r, int c);
+    void darkenZone();
+    void showWinText();
 
     int zone_height;
     int zone_width;

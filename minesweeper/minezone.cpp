@@ -268,3 +268,57 @@ int Minezone::getNumMines()
 {
     return n_mines;
 }
+
+void Minezone::darkenZone()
+{
+//    Effect failed: how to pause execution?
+//    for (int i = 0; i < n_rows + n_cols - 1; i++) {
+//        int j = 0;
+//        while (j <= i && j < n_rows) {
+//            int k = i - j;
+//            if (k >= n_cols) {
+//                j += 1;
+//                continue;
+//            }
+//            mine_btns[j][k]->setText("");
+//            mine_btns[j][k]->setChecked(false);
+//            mine_btns[j][k]->setEnabled(false);
+//            j += 1;
+//        }
+//    }
+    for (int i = 0; i < n_rows; i++) {
+        for (int j = 0; j < n_cols; j++) {
+            mine_btns[i][j]->setText("");
+            mine_btns[i][j]->setChecked(false);
+            mine_btns[i][j]->setEnabled(false);
+        }
+    }
+}
+
+void Minezone::showWinText()
+{
+    mine_btns[3][3]->setEnabled(true);
+    mine_btns[3][3]->setText("Y");
+    mine_btns[3][3]->setChecked(true);
+    mine_btns[4][3]->setEnabled(true);
+    mine_btns[4][3]->setText("O");
+    mine_btns[4][3]->setChecked(true);
+    mine_btns[5][3]->setEnabled(true);
+    mine_btns[5][3]->setText("U");
+    mine_btns[5][3]->setChecked(true);
+    mine_btns[3][5]->setEnabled(true);
+    mine_btns[3][5]->setText("W");
+    mine_btns[3][5]->setChecked(true);
+    mine_btns[4][5]->setEnabled(true);
+    mine_btns[4][5]->setText("O");
+    mine_btns[4][5]->setChecked(true);
+    mine_btns[5][5]->setEnabled(true);
+    mine_btns[5][5]->setText("N");
+    mine_btns[5][5]->setChecked(true);
+}
+
+void Minezone::showWinningMessage()
+{
+    darkenZone();
+    showWinText();
+}

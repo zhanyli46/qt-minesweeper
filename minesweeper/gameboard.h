@@ -24,8 +24,6 @@ private:
     QPushButton *restart;
     MineCounter *counter;
     Minezone *mz;
-    int zone_height;
-    int zone_width;
     Difficulty lv;
     int h_offset;
     int top_offset;

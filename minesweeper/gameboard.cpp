@@ -23,7 +23,7 @@ Gameboard::Gameboard(QWidget *parent) :
     timer->resize(83, 30);
     restart->resize(30, 30);
     counter->resize(83, 30);
-    mz->resize(216, 216);
+    mz->resize(mz->getHeight(), mz->getWidth());
 
     QPixmap pm(":/img/restart.png");
     QIcon icon(pm);
@@ -39,7 +39,7 @@ Gameboard::Gameboard(QWidget *parent) :
     connect(mz, SIGNAL(gameStart()), timer, SLOT(start()));
     connect(mz, SIGNAL(gameWon()), this, SLOT(winGame()));
     connect(mz, SIGNAL(gameOver()), this, SLOT(endGame()));
-    connect(restart, SIGNAL(clicked(bool)), this, SLOT(restartGame()));
+    connect(restart, SIGNAL(clicked(bool)), this, SLOT(winGame()));
     connect(mz, SIGNAL(label()), counter, SLOT(minusOne()));
     connect(mz, SIGNAL(unlabel()), counter, SLOT(plusOne()));
 
@@ -59,6 +59,7 @@ void Gameboard::winGame()
 {
     timer->stop();
     mz->ignoreInputs();
+    mz->showWinningMessage();
 }
 
 void Gameboard::endGame()
