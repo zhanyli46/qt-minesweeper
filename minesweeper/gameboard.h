@@ -29,9 +29,14 @@ private:
     int zone_height;
     int zone_width;
     Difficulty lv;
+    int h_offset;
+    int top_offset;
+    int bottom_offset;
+    int dist_offset;
 
 private slots:
-    void gameOver();
+    void endGame();
+    void restartGame();
 };
 
 #endif // GAMEBOARD_H

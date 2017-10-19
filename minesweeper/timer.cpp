@@ -13,10 +13,15 @@ GameTimer::~GameTimer()
 
 }
 
-void GameTimer::start(int msec)
+void GameTimer::start()
 {
-    timer->start(msec);
+    timer->start(1000);
     startTime = QTime::currentTime();
+}
+
+void GameTimer::stop()
+{
+    timer->stop();
 }
 
 void GameTimer::showTime()

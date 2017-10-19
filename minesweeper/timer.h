@@ -12,13 +12,14 @@ class GameTimer : public QLCDNumber
 public:
     GameTimer(QWidget *parent = 0);
     ~GameTimer();
-    void start(int msec);
+    void stop();
 
 private:
     QTimer *timer;
     QTime startTime;
 
 private slots:
+    void start();
     void showTime();
 };
 

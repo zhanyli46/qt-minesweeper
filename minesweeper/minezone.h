@@ -40,11 +40,15 @@ public:
     void print();
     int getHeight() { return zone_height; }
     int getWidth() { return zone_width; }
+    void acceptInputs();
     void ignoreInputs();
     void showAllMines();
+    void resetZone(Difficulty lv);
 
 private:
     void setLevel(Difficulty lv);
+    void createZone();
+    void destroyZone();
     inline void mineIdToRC(int id, int *r, int *c);
     int numMinesAround(int r, int c);
     void generateMines(int r, int c);
@@ -67,8 +71,10 @@ private slots:
     void onRightMouseClick(int btn_id);
 
 signals:
-    void sigGameWon();
-    void sigGameOver();
+    void gameStart();
+    void gameWon();
+    void gameOver();
+
 };
 
 #endif // MINEZONE_H

@@ -1,6 +1,5 @@
 #include "gameboard.h"
 #include "ui_gameboard.h"
-#include <iostream>
 
 Gameboard::Gameboard(QWidget *parent) :
     QMainWindow(parent),
@@ -9,15 +8,15 @@ Gameboard::Gameboard(QWidget *parent) :
     ui->setupUi(this);
     lv = EASY;
     // setup user interface
-    int h_offset= 12;
-    int top_offset = 24;
-    int bottom_offset = 12;
-    int dist_offset = 10;
+    h_offset= 12;
+    top_offset = 24;
+    bottom_offset = 12;
+    dist_offset = 10;
 
     timer = new GameTimer(this);
     restart = new QPushButton(this);
     counter = new QLCDNumber(this);
-    mz = new Minezone(this, EASY);
+    mz = new Minezone(this, lv);
     timer->resize(83, 30);
     restart->resize(30, 30);
     counter->resize(83, 30);
@@ -29,7 +28,9 @@ Gameboard::Gameboard(QWidget *parent) :
     mz->move(h_offset, timer->pos().y() + timer->size().height() + dist_offset);
     resize(h_offset * 2 + mz->size().width(), top_offset + bottom_offset + mz->size().height() + dist_offset + timer->size().height());
 
-    connect(mz, SIGNAL(sigGameOver()), this, SLOT(gameOver()));
+    connect(mz, SIGNAL(gameStart()), timer, SLOT(start()));
+    connect(mz, SIGNAL(gameOver()), this, SLOT(endGame()));
+    connect(restart, SIGNAL(clicked(bool)), this, SLOT(restartGame()));
 
     setMinimumHeight(height());
     setMaximumHeight(height());
@@ -40,10 +41,17 @@ Gameboard::Gameboard(QWidget *parent) :
 Gameboard::~Gameboard()
 {
     delete ui;
+    delete mz;
 }
 
-void Gameboard::gameOver()
+void Gameboard::endGame()
 {
+    timer->stop();
     mz->ignoreInputs();
     mz->showAllMines();
+}
+
+void Gameboard::restartGame()
+{
+    mz->resetZone(lv);
 }

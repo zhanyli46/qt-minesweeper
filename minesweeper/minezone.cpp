@@ -2,13 +2,47 @@
 #include <QtGlobal>
 #include <QQueue>
 #include <ctime>
-#include <iostream>
 
 Minezone::Minezone(QWidget *parent, Difficulty lv) :
     QWidget(parent)
 {
     // setup level info
     setLevel(lv);
+    createZone();
+}
+
+Minezone::~Minezone()
+{
+    destroyZone();
+}
+
+void Minezone::acceptInputs()
+{
+    setAttribute(Qt::WA_TransparentForMouseEvents, false);
+}
+
+void Minezone::ignoreInputs()
+{
+    setAttribute(Qt::WA_TransparentForMouseEvents, true);
+}
+
+void Minezone::showAllMines()
+{
+    for (int i = 0; i < n_rows; i++)
+    {
+        for (int j = 0; j < n_cols; j++)
+        {
+            if (zone[i][j] == MINE && !mine_btns[i][j]->isFlagged()) {
+                mine_btns[i][j]->setText("*");
+                mine_btns[i][j]->setChecked(true);
+            }
+        }
+    }
+}
+
+void Minezone::createZone()
+{
+    // set window size and randgen
     zone_height = n_rows * TILE_SIZE;
     zone_width = n_cols * TILE_SIZE;
     qsrand(time(0));
@@ -32,6 +66,7 @@ Minezone::Minezone(QWidget *parent, Difficulty lv) :
             mine_btns[i][j]->setFixedSize(TILE_SIZE, TILE_SIZE);
             mine_btns[i][j]->setCheckable(true);
             mine_btns[i][j]->move(TILE_SIZE * i, TILE_SIZE * j);
+            mine_btns[i][j]->show();
 
             // assign id to each button to handle signal
             int btn_id = i * n_rows + j;
@@ -45,11 +80,11 @@ Minezone::Minezone(QWidget *parent, Difficulty lv) :
     // connect the mapper to handler function
     connect(leftMapper, SIGNAL(mapped(int)), this, SLOT(onLeftMouseClick(int)));
     connect(rightMapper, SIGNAL(mapped(int)), this, SLOT(onRightMouseClick(int)));
-
 }
 
-Minezone::~Minezone()
+void Minezone::destroyZone()
 {
+
     for (int i = 0; i < n_rows; i++)
     {
         delete zone[i];
@@ -59,35 +94,16 @@ Minezone::~Minezone()
     }
     delete zone;
     delete mine_btns;
+    delete leftMapper;
+    delete rightMapper;
 }
 
-void Minezone::print()
+void Minezone::resetZone(Difficulty lv)
 {
-    for (int i = 0; i < n_rows; i++)
-    {
-        for (int j = 0; j < n_cols; j++)
-            std::cerr << zone[i][j] << " ";
-        std::cerr << "\n";
-    }
-}
-
-void Minezone::ignoreInputs()
-{
-    setAttribute(Qt::WA_TransparentForMouseEvents);
-}
-
-void Minezone::showAllMines()
-{
-    for (int i = 0; i < n_rows; i++)
-    {
-        for (int j = 0; j < n_cols; j++)
-        {
-            if (zone[i][j] == MINE && !mine_btns[i][j]->isFlagged()) {
-                mine_btns[i][j]->setText("*");
-                mine_btns[i][j]->setChecked(true);
-            }
-        }
-    }
+    destroyZone();
+    setLevel(lv);
+    createZone();
+    acceptInputs();
 }
 
 void Minezone::setLevel(Difficulty lv)
@@ -193,7 +209,7 @@ void Minezone::expandZone(int r, int c)
         } else if (btn_stat == MINE) {
             btn->setText("*");
             btn->setChecked(true);
-            emit sigGameOver();
+            emit gameOver();
         } else {
             if (numMinesAround(i, j) == 0) {
                 if (i + 1 < n_rows)
@@ -221,6 +237,7 @@ void Minezone::onLeftMouseClick(int btn_id)
         firstClick = false;
         generateMines(r, c);
         generateHintTiles();
+        emit gameStart();
     }
     expandZone(r, c);
 }
