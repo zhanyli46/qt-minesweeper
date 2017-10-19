@@ -37,14 +37,13 @@ class Minezone : public QWidget
 public:
     Minezone(QWidget *parent = 0, Difficulty lv = EASY);
     ~Minezone();
-    void print();
     int getHeight() { return zone_height; }
     int getWidth() { return zone_width; }
+    int getNumMines() { return n_mines; }
     void acceptInputs();
     void ignoreInputs();
     void showAllMines();
     void resetZone(Difficulty lv);
-    int getNumMines();
     void showWinningMessage();
 
 private:
